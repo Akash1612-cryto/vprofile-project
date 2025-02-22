@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+    environment {
+        BUILD_VERSION = "${env.BUILD_ID}"
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Akash1612-cryto/vprofile-project.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+        stage('Archive Artifacts') {
+            steps {
+                archiveArtifacts artifacts: "target/vprofile-${BUILD_VERSION}.war", fingerprint: true
+            }
+        }
+    }
+}
